@@ -1,0 +1,38 @@
+apiVersion: 2018-10-01
+location: northeurope
+name: port_expose
+properties:
+  containers:
+  - name: server8080
+    properties:
+      image: sepp28/helidon:8080
+      ports: 
+      - protocol: TCP
+        port: 8080
+      resources:
+        requests:
+          cpu: 0.5
+          memoryInGB: 0.2
+  - name: server8090
+    properties:
+      image: sepp28/helidon:8090
+      resources:
+        requests:
+          cpu: 0.5
+          memoryInGB: 0.2
+  - name: curl
+    properties:
+      image: sepp28/curl
+      command: 
+        - 'sh'
+        - '-c'
+        - 'curl localhost:8080/greet/FromPort8080 --next  localhost:8090/greet/FromPort8090'
+      resources:
+        requests:
+          cpu: 0.1
+          memoryInGB: 0.1
+
+  osType: Linux
+  restartPolicy: Never
+tags: null
+type: Microsoft.ContainerInstance/containerGroups
